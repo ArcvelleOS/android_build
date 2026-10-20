@@ -24,7 +24,9 @@ PRODUCT_VENDOR_PROPERTIES := \
     ro.com.android.dataroaming?=true
 
 PRODUCT_COPY_FILES := \
-    device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml \
+
+    device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
+
 
 ifneq ($(TARGET_IS_COMPUTE),true)
 PRODUCT_COPY_FILES += \
