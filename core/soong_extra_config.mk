@@ -78,6 +78,7 @@ $(call add_json_bool, ZygoteForce64, $(filter true,$(ZYGOTE_FORCE_64)))
 $(call add_json_str, VendorSecurityPatch,       $(VENDOR_SECURITY_PATCH))
 $(call add_json_str, VendorImageFileSystemType, $(BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE))
 
+$(call add_json_str, BuildKeys, $(BUILD_KEYS))
 $(call add_json_list, BuildVersionTags, $(BUILD_VERSION_TAGS))
 
 $(call add_json_bool, ProductNotDebuggableInUserdebug, $(PRODUCT_NOT_DEBUGGABLE_IN_USERDEBUG))

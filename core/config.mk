@@ -1322,6 +1322,19 @@ ifeq (true,$(EMMA_INSTRUMENT))
 COVERAGE_SUFFIX := .coverage
 endif
 
+# The "test-keys" tag marks builds signed with the old test keys,
+# which are available in the SDK.  "dev-keys" marks builds signed with
+# non-default dev keys (usually private keys from a vendor directory).
+# Both of these tags will be removed and replaced with "release-keys"
+# when the target-files is signed in a post-build step.
+ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/make/target/product/security/testkey)
+BUILD_KEYS := test-keys
+else ifneq ($(filter vendor/arcvelle-priv/% $(if $(ANDROID_CERTS_DIR),$(ANDROID_CERTS_DIR)/%),$(strip $(DEFAULT_SYSTEM_DEV_CERTIFICATE))),)
+BUILD_KEYS := release-keys
+else
+BUILD_KEYS := dev-keys
+endif
+
 SOONG_VARIABLES := $(SOONG_OUT_DIR)/soong.$(TARGET_PRODUCT)$(COVERAGE_SUFFIX).variables
 SOONG_EXTRA_VARIABLES := $(SOONG_OUT_DIR)/soong.$(TARGET_PRODUCT)$(COVERAGE_SUFFIX).extra.variables
 
@@ -1358,18 +1371,6 @@ endif
 BUILD_VERSION_TAGS := $(BUILD_VERSION_TAGS)
 ifeq ($(TARGET_BUILD_TYPE),debug)
   BUILD_VERSION_TAGS += debug
-endif
-# The "test-keys" tag marks builds signed with the old test keys,
-# which are available in the SDK.  "dev-keys" marks builds signed with
-# non-default dev keys (usually private keys from a vendor directory).
-# Both of these tags will be removed and replaced with "release-keys"
-# when the target-files is signed in a post-build step.
-ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/make/target/product/security/testkey)
-BUILD_KEYS := test-keys
-else ifneq ($(filter vendor/arcvelle-priv/% $(if $(ANDROID_CERTS_DIR),$(ANDROID_CERTS_DIR)/%),$(strip $(DEFAULT_SYSTEM_DEV_CERTIFICATE))),)
-BUILD_KEYS := release-keys
-else
-BUILD_KEYS := dev-keys
 endif
 BUILD_VERSION_TAGS += $(BUILD_KEYS)
 BUILD_VERSION_TAGS := $(subst $(space),$(comma),$(sort $(BUILD_VERSION_TAGS)))
